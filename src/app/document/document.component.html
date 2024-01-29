@@ -1,0 +1,121 @@
+<div class="container">
+  <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+    <div class="row mb-3">
+      <div class="col-3">
+        <div class="form-group">
+          <label for="typeahead-basic">Search for ID:</label>
+          <input
+            id="typeahead-basic"
+            type="text"
+            class="form-control"
+            formControlName="ID"
+          />
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="form-group">
+          <label for="typeahead-basic">Search for Title:</label>
+          <input
+            id="typeahead-basic"
+            type="text"
+            class="form-control"
+            formControlName="title"
+          />
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="form-group">
+          <label for="typeahead-basic">Search for Type:</label>
+          <input
+            id="typeahead-basic"
+            type="text"
+            class="form-control"
+            formControlName="type"
+          />
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="form-group">
+          <label for="typeahead-basic">Search for a state:</label>
+          <input
+            id="typeahead-basic"
+            type="text"
+            class="form-control"
+            formControlName="state"
+          />
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Search</button>
+      <button type="button" class="btn btn-secondary ml-1">Clear</button>
+    </div>
+  </form>
+  <div class="row d-flex">
+    <span>Table Header</span>
+    <div class="ml-auto">
+      <button type="button" class="btn btn-primary">Add</button>
+    </div>
+  </div>
+  <div class="row">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col" sortable="name" (sort)="onSort($event)">Title</th>
+          <th scope="col" sortable="area" (sort)="onSort($event)">Summary</th>
+          <th scope="col" sortable="population" (sort)="onSort($event)">
+            Type
+          </th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (document of documents ; track document.id) {
+        <tr>
+          <th scope="row">{{ document.id }}</th>
+          <td>
+            <ngb-highlight [result]="document.title" [term]="filter.value" />
+          </td>
+          <td>
+            <ngb-highlight [result]="document.summary" [term]="filter.value" />
+          </td>
+          <td>
+            <ngb-highlight
+              [result]="document.type.toString()"
+              [term]="filter.value"
+            />
+          </td>
+          <td>
+            <span>Edit</span>
+            <span class="ml-1">Delete</span>
+          </td>
+        </tr>
+        } @empty {
+        <tr>
+          <td colspan="4" style="text-align: center">No countries found</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+
+    <div class="d-flex justify-content-between p-2 w-100">
+      <ngb-pagination
+        [collectionSize]="collectionSize"
+        [(page)]="page"
+        [pageSize]="pageSize"
+        (pageChange)="onPageChange()"
+      >
+      </ngb-pagination>
+
+      <select
+        class="form-select rounded-lg"
+        style="width: auto"
+        [(ngModel)]="pageSize"
+        (ngModelChange)="setPageSize()"
+      >
+        <option [ngValue]="2">2 items per page</option>
+        <option [ngValue]="4">4 items per page</option>
+        <option [ngValue]="6">6 items per page</option>
+      </select>
+    </div>
+  </div>
+</div>
